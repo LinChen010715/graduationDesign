@@ -12,20 +12,18 @@ import HelloWorld from "./components/HelloWorld.vue";
     </a>
   </div>
   <HelloWorld msg="Vite + Vue" /> -->
-  <router-view></router-view>
+  <div class="viewContainer"><router-view></router-view></div>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+<style>
+html,
+body {
+  background: #f0f2f5;
+  /*a-modal 会使 body 宽度缩小*/
+  width: 100% !important;
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+  box-sizing: border-box;
 }
 </style>

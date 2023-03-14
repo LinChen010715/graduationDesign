@@ -4,23 +4,48 @@
       <router-view></router-view>
     </div>
     <div class="menu">
-      <template v-for="item in menu" :key="item.key">
-        <router-link :to="item.path"
-          ><p>{{ item.name }}</p></router-link
-        >
-      </template>
+      <el-menu
+        :uniqueOpened="true"
+        default-active="2"
+        class="el-menu-vertical-demo"
+        @open="handleOpen"
+        @close="handleClose"
+        background-color="#545c64"
+        text-color="#fff"
+        active-text-color="#ffd04b"
+      >
+        <template v-for="item in menu">
+          <template v-if="!item.children">
+            <el-menu-item>
+              <router-link :to="item.path"
+                ><p>{{ item.name }}</p></router-link
+              >
+            </el-menu-item>
+          </template>
+          <template v-else>
+            <sub-menu :menu-info="item"></sub-menu>
+          </template>
+        </template>
+      </el-menu>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "homePage",
-};
+  props: {},
+});
 </script>
 
 <script lang="ts" setup>
 import menu from "@/router/menu";
+import SubMenu from "./SubMenu.vue";
+
+function handleOpen() {}
+function handleClose() {}
 </script>
 
 <style>
@@ -46,8 +71,5 @@ import menu from "@/router/menu";
 
 p {
   color: white;
-}
-p:hover {
-  color: #333;
 }
 </style>

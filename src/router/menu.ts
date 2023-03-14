@@ -1,34 +1,39 @@
 export default [
+    // {
+    //     path: '/home',
+    //     name: '破镜之刃',
+    //     component: ()=>import('@/views/home.vue')
+    // },
+    // {
+    //     path: '/firstPage',
+    //     name: '星辰之子',
+    //     component: ()=>import('@/views/firstPage.vue')
+    // },
+    // {
+    //     path: '/secondPage',
+    //     name: '鲨之猎刃',
+    //     component: ()=>import('@/views/secondPage.vue')
+    // },
     {
-        path: '/home',
-        name: '破镜之刃',
-        component: ()=>import('@/views/home.vue')
-    },
-    {
-        path: '/firstPage',
-        name: '星辰之子',
-        component: ()=>import('@/views/firstPage.vue')
-    },
-    {
-        path: '/secondPage',
-        name: '鲨之猎刃',
-        component: ()=>import('@/views/secondPage.vue')
-    },
-    {
-        path: '/test',
-        name: '试炼场',
-        component: ()=>import('@/views/test/index.vue'),
+        path: '',
+        name: '训练营',
         children:[
             {
-                path: '/tab1',
-                name: 'tab1',
-                component: ()=>import('../views/test/tab1/tab1.vue')
+                path: '/test',
+                name: '一号训练场',
+                component: ()=>import('@/views/testHouse/test/index.vue')
             },
             {
-                path: '/tab2',
-                name: 'tab2',
-                component: ()=>import('../views/test/tab2/tab2.vue'),
+                path: '',
+                name: '二号训练场',
+                children:[
+                    {
+                        path: '/test2',
+                        name: '还没想好要练什么',
+                        component: ()=>import('@/views/testHouse/test2/testInTest/index.vue')
+                    }
+                ]
             }
         ]
-    }
+    },
 ]
