@@ -6,3 +6,5 @@ declare module '*.vue' {
     const component: ReturnType<typeof defineComponent> | any;
     export default component;
 }
+
+declare module 'three'

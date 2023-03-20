@@ -1,17 +1,24 @@
 <template>
-  <el-form :model="loginForm" label-width="60px">
-    <el-form-item label="用户名:">
+  <el-form
+    ref="formRef"
+    :model="loginForm"
+    label-width="70px"
+    :rules="rules"
+    :hide-required-asterisk="true"
+  >
+    <el-form-item label="用户名:" prop="account">
       <el-input
-        v-model="loginForm.userName"
+        v-model="loginForm.account"
         placeholder="请输入用户名"
         clearable
       />
     </el-form-item>
-    <el-form-item label="密码:">
+    <el-form-item label="密码:" prop="password">
       <el-input
         v-model="loginForm.password"
         placeholder="请输入密码"
         clearable
+        show-password
         type="password"
       />
     </el-form-item>
@@ -27,10 +34,40 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
+import { ElMessage } from "element-plus";
+
+const formRef = ref();
 
 const loginForm = ref({
-  userName: "",
+  account: "",
   password: "",
+});
+
+const rules = ref({
+  account: [{ required: true, message: "用户名不能为空", trigger: "blur" }],
+  password: [{ required: true, message: "密码不能为空", trigger: "blur" }],
+});
+
+function validate() {
+  if (!loginForm.value.account || loginForm.value.account === "") {
+    ElMessage({
+      message: "用户名不能为空",
+      type: "warning",
+    });
+    return false;
+  } else if (!loginForm.value.password || loginForm.value.password === "") {
+    ElMessage({
+      message: "密码不能为空",
+      type: "warning",
+    });
+    return false;
+  }
+  return true;
+}
+
+defineExpose({
+  loginForm,
+  validate,
 });
 </script>
 

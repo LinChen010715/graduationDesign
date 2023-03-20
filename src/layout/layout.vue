@@ -1,7 +1,10 @@
 <template>
   <div class="main">
     <div class="content">
-      <router-view></router-view>
+      <div class="top">
+        <user-info></user-info>
+      </div>
+      <div class="viewContainer"><router-view></router-view></div>
     </div>
     <div class="menu">
       <el-menu
@@ -43,6 +46,7 @@ export default defineComponent({
 <script lang="ts" setup>
 import menu from "@/router/menu";
 import SubMenu from "./SubMenu.vue";
+import UserInfo from "./UserInfo.vue";
 
 function handleOpen() {}
 function handleClose() {}
@@ -57,14 +61,24 @@ function handleClose() {}
   left: 0;
   box-sizing: border-box;
   display: flex;
-  border: 1px solid black;
 }
 .content {
-  width: 90%;
+  width: 88%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.top {
+  width: 100%;
+  height: 8%;
+  background-color: grey;
+}
+.viewContainer {
+  width: 100%;
+  height: 92%;
 }
 .menu {
-  width: 10%;
+  width: 12%;
   height: 100%;
   background-color: grey;
 }
