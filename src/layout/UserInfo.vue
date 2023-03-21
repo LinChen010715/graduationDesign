@@ -1,11 +1,26 @@
 <template>
   <div class="container">
-    <span>{{ name }},欢迎您</span>
-    <div>
-      <el-button type="text" @click="openChangePasswordDialog"
-        >修改密码</el-button
-      >
-      <el-button type="text" @click="loginOut">退出登录</el-button>
+    <span>尊敬的{{ name }},欢迎您</span>
+    <div class="operate">
+      <div class="fullScreen"><full-screen></full-screen></div>
+      <el-dropdown>
+        <span class="el-dropdown-link">
+          <el-avatar :icon="UserFilled" :size="25" />
+          <el-icon class="el-icon--right">
+            <arrow-down />
+          </el-icon>
+        </span>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item icon="Setting" @click="openChangePasswordDialog"
+              >修改密码</el-dropdown-item
+            >
+            <el-dropdown-item icon="SwitchButton" @click="loginOut"
+              >退出登录</el-dropdown-item
+            >
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </div>
   </div>
 
@@ -25,8 +40,10 @@ import router from "@/router";
 import request from "@/utils/request";
 import { userStore } from "./index";
 import ChangePassword from "./ChangePassword.vue";
+import FullScreen from "./FullScreen.vue";
 import { ref } from "vue";
 import { ElMessage } from "element-plus";
+import { UserFilled, ArrowDown } from "@element-plus/icons-vue";
 
 const userInfoStore = userStore();
 
@@ -36,7 +53,14 @@ const name =
     : "超级无敌嘎嘎牛*赛亚人";
 
 async function loginOut() {
-  const res = await request.post("/system/user/manage/logout");
+  const res = await request.post("/api/v1/user/manage/logout");
+  if (!res) {
+    return;
+  }
+  ElMessage({
+    message: "已退出",
+    type: "success",
+  });
   localStorage.clear();
   router.push("./login");
 }
@@ -82,12 +106,18 @@ function submitChange() {
   justify-content: space-between;
   padding: 10px;
 }
+
 span {
   color: white;
   font-size: 20px;
 }
 
-:deep(.el-button--text) {
-  color: white;
+.operate {
+  display: flex;
+  padding: 5px;
+}
+
+.fullScreen {
+  margin-right: 20px;
 }
 </style>

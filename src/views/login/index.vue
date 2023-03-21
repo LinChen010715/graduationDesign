@@ -41,7 +41,7 @@ async function login() {
     return;
   }
 
-  const res = await request.post("/system/user/manage/login", {
+  const res = await request.post("/api/v1/user/manage/login", {
     account: loginFormRef.value.loginForm.account,
     password: loginFormRef.value.loginForm.password,
   });

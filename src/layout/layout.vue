@@ -47,6 +47,41 @@ export default defineComponent({
 import menu from "@/router/menu";
 import SubMenu from "./SubMenu.vue";
 import UserInfo from "./UserInfo.vue";
+import { userStore } from "./index";
+import { onMounted } from "vue";
+import { ElMessage } from "element-plus";
+import router from "@/router";
+
+const userInfoStore = userStore();
+const userName = userInfoStore.userInfo.userName;
+const account = userInfoStore.userInfo.account;
+const password = userInfoStore.userInfo.password;
+
+function checkLoginStatus() {
+  if (
+    !userName ||
+    !account ||
+    !password ||
+    userName === "" ||
+    account === "" ||
+    password === ""
+  ) {
+    return false;
+  }
+  return true;
+}
+
+onMounted(() => {
+  let status = checkLoginStatus();
+  if (!status) {
+    ElMessage({
+      message: "您尚未登录，已为您跳转至登录页",
+      type: "warning",
+    });
+    router.push("/login");
+    return;
+  }
+});
 
 function handleOpen() {}
 function handleClose() {}
