@@ -1,3 +1,5 @@
 <template>
-  <div>2</div>
+  <div>
+    <m-button></m-button>
+  </div>
 </template>

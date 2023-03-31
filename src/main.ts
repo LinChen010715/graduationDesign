@@ -8,6 +8,8 @@ import request from '@/utils/request'
 import { createPinia } from 'pinia'
 import { createPersistedState } from 'pinia-plugin-persistedstate'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import MComponent from 'm-component-storage'
+import 'm-component-storage/style.css'
 
 
 const app = createApp(App)
@@ -22,6 +24,8 @@ pinia.use(createPersistedState({
 app.use(router)
 app.use(elementPlus)
 app.use(pinia)
+
+app.use(MComponent)
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)

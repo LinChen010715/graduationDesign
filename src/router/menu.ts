@@ -33,11 +33,6 @@ export default [
                         component: ()=>import('@/views/testHouse/test2/testInTest/index.vue')
                     }
                 ]
-            },
-            {
-                path: '/canvas',
-                name: 'canvas',
-                component:()=>import('@/views/testHouse/canvas/canvas.vue')
             }
         ]
     },
