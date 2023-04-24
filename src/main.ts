@@ -8,9 +8,13 @@ import request from '@/utils/request'
 import { createPinia } from 'pinia'
 import { createPersistedState } from 'pinia-plugin-persistedstate'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-import MComponent from 'm-component-storage'
-import 'm-component-storage/style.css'
 
+// 自定义组件 - 表格
+import XTable from '@/components/x-table/index.vue';
+// 自定义组件 - 表单
+import XForm from '@/components/x-form/index.vue';
+// 自定义组件 - 表单弹窗
+import XFormDialog from '@/components/x-form/dialog.vue';
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -21,11 +25,18 @@ pinia.use(createPersistedState({
       }
 }))
 
+// 全局注册自定义组件 - 表格
+app.component('XTable', XTable);
+// 全局注册自定义组件 - 表单
+app.component('XForm', XForm);
+// 全局注册自定义组件 - 表单弹窗
+app.component('XFormDialog', XFormDialog);
+
 app.use(router)
 app.use(elementPlus)
 app.use(pinia)
 
-app.use(MComponent)
+
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
