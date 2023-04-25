@@ -11,6 +11,7 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 // 自定义组件 - 表格
 import XTable from '@/components/x-table/index.vue';
+import ColumnSetting from '@/components/x-table/column-setting/index.vue';
 // 自定义组件 - 表单
 import XForm from '@/components/x-form/index.vue';
 // 自定义组件 - 表单弹窗
@@ -27,6 +28,7 @@ pinia.use(createPersistedState({
 
 // 全局注册自定义组件 - 表格
 app.component('XTable', XTable);
+app.component('ColumnSetting', ColumnSetting);
 // 全局注册自定义组件 - 表单
 app.component('XForm', XForm);
 // 全局注册自定义组件 - 表单弹窗

@@ -9,4 +9,4 @@ declare module '*.vue' {
 
 declare module 'element-plus'
 declare module '@element-plus/icons-plus'
-declare module 'm-component-storage'
+declare module 'lodash-es'
