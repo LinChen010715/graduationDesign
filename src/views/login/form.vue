@@ -77,4 +77,8 @@ defineExpose({
   width: 80%;
   justify-content: space-around;
 }
+
+::v-deep(.el-form-item__label) {
+  color: #fff;
+}
 </style>

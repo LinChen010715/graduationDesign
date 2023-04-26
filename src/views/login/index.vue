@@ -125,20 +125,22 @@ function loginNow() {
 .login {
   width: 100%;
   height: 100vh;
-  background-image: url(@/assets/previewFix.jpg);
+  background-image: url(@/assets/back.jpg);
   background-size: 100% 100%;
 }
 .loginContainer {
   width: 20%;
   padding: 10px;
   position: absolute;
-  left: 300px;
-  top: 300px;
+  right: 50px;
+  top: 400px;
+  border: 1px solid #fff;
 }
 
 .title {
   font-size: 20px;
   padding: 10px;
   text-align: center;
+  color: #fff;
 }
 </style>
