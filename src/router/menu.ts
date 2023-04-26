@@ -1,19 +1,4 @@
 export default [
-    // {
-    //     path: '/home',
-    //     name: '破镜之刃',
-    //     component: ()=>import('@/views/home.vue')
-    // },
-    // {
-    //     path: '/firstPage',
-    //     name: '星辰之子',
-    //     component: ()=>import('@/views/firstPage.vue')
-    // },
-    // {
-    //     path: '/secondPage',
-    //     name: '鲨之猎刃',
-    //     component: ()=>import('@/views/secondPage.vue')
-    // },
     {
         path: '',
         name: '训练营',

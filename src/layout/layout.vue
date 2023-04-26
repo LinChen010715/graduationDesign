@@ -1,21 +1,16 @@
 <template>
   <div class="main">
-    <div class="content">
-      <div class="top">
-        <user-info></user-info>
-      </div>
-      <div class="viewContainer"><router-view></router-view></div>
-    </div>
     <div class="menu">
+      <h2>{{ title }}</h2>
       <el-menu
         :uniqueOpened="true"
         default-active="2"
-        class="el-menu-vertical-demo"
+        class="el-menu"
         @open="handleOpen"
         @close="handleClose"
-        background-color="#545c64"
-        text-color="#fff"
-        active-text-color="#ffd04b"
+        background-color="#fff"
+        text-color="rgb(200, 200, 255)"
+        active-text-color="rgb(200, 200, 255)"
       >
         <template v-for="item in menu">
           <template v-if="!item.children">
@@ -30,6 +25,12 @@
           </template>
         </template>
       </el-menu>
+    </div>
+    <div class="content">
+      <div class="top">
+        <user-info></user-info>
+      </div>
+      <div class="viewContainer"><router-view></router-view></div>
     </div>
   </div>
 </template>
@@ -48,9 +49,11 @@ import menu from "@/router/menu";
 import SubMenu from "./SubMenu.vue";
 import UserInfo from "./UserInfo.vue";
 import { userStore } from "./index";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { ElMessage } from "element-plus";
 import router from "@/router";
+
+const title = ref(import.meta.env.VITE_APP_NAME as string);
 
 const userInfoStore = userStore();
 const userName = userInfoStore.userInfo.userName;
@@ -72,15 +75,15 @@ function checkLoginStatus() {
 }
 
 onMounted(() => {
-  let status = checkLoginStatus();
-  if (!status) {
-    ElMessage({
-      message: "您尚未登录，已为您跳转至登录页",
-      type: "warning",
-    });
-    router.push("/login");
-    return;
-  }
+  // let status = checkLoginStatus();
+  // if (!status) {
+  //   ElMessage({
+  //     message: "您尚未登录，已为您跳转至登录页",
+  //     type: "warning",
+  //   });
+  //   router.push("/login");
+  //   return;
+  // }
 });
 
 function handleOpen() {}
@@ -97,6 +100,10 @@ function handleClose() {}
   box-sizing: border-box;
   display: flex;
 }
+
+.h2 {
+  color: #fff;
+}
 .content {
   width: 88%;
   height: 100%;
@@ -106,7 +113,7 @@ function handleClose() {}
 .top {
   width: 100%;
   height: 8%;
-  background-color: grey;
+  background-color: rgb(200, 200, 255);
 }
 .viewContainer {
   width: 100%;
@@ -115,10 +122,13 @@ function handleClose() {}
 .menu {
   width: 12%;
   height: 100%;
-  background-color: grey;
+  background-color: rgb(200, 200, 255);
 }
 
-p {
-  color: white;
+.el-menu .el-menu-item:hover {
+  background-color: rgb(200, 200, 255);
+}
+.el-menu .el-menu-item:hover p {
+  color: #fff;
 }
 </style>
