@@ -2,7 +2,7 @@
   <el-sub-menu>
     <template #title>{{ menuInfo.name }}</template>
 
-    <template v-for="item in menuInfo.children">
+    <template v-for="item in menuInfo.children" :key="item" :index="item.index">
       <template v-if="!item.children">
         <el-menu-item>
           <router-link :to="item.path"

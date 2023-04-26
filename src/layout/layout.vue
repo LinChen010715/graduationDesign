@@ -3,7 +3,7 @@
     <div class="menu">
       <h2>{{ title }}</h2>
       <el-menu
-        :uniqueOpened="true"
+        :unique-opened="true"
         default-active="2"
         class="el-menu"
         @open="handleOpen"
@@ -12,7 +12,7 @@
         text-color="rgb(200, 200, 255)"
         active-text-color="rgb(200, 200, 255)"
       >
-        <template v-for="item in menu">
+        <template v-for="item in menu" :key="item" :index="item.index">
           <template v-if="!item.children">
             <el-menu-item>
               <router-link :to="item.path"

@@ -50,7 +50,7 @@ const userInfoStore = userStore();
 const name =
   userInfoStore.userInfo.userName !== ""
     ? userInfoStore.userInfo.userName
-    : "超级无敌嘎嘎牛*赛亚人";
+    : "游客";
 
 async function loginOut() {
   const res = await request.post("/api/v1/user/manage/logout");
