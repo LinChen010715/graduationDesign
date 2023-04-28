@@ -3,24 +3,25 @@
     <div class="menu">
       <h2>{{ title }}</h2>
       <el-menu
-        :unique-opened="true"
-        default-active="2"
+        router
+        unique-opened
         class="el-menu"
         @open="handleOpen"
         @close="handleClose"
-        background-color="#fff"
-        text-color="rgb(200, 200, 255)"
+        :default-active="getDefaultActive()"
+        background-color="#rgb(200, 200, 255)"
+        text-color="#fff"
         active-text-color="rgb(200, 200, 255)"
       >
-        <template v-for="item in menu" :key="item" :index="item.index">
+        <template v-for="item in menu" :key="item">
           <template v-if="!item.children">
-            <el-menu-item>
+            <el-menu-item :index="item.path">
               <router-link :to="item.path"
                 ><p>{{ item.name }}</p></router-link
               >
             </el-menu-item>
           </template>
-          <template v-else>
+          <template v-else :index="item.path">
             <sub-menu :menu-info="item"></sub-menu>
           </template>
         </template>
@@ -52,6 +53,7 @@ import { userStore } from "./index";
 import { onMounted, ref } from "vue";
 import { ElMessage } from "element-plus";
 import router from "@/router";
+import { useRoute } from "vue-router";
 
 const title = ref(import.meta.env.VITE_APP_NAME as string);
 
@@ -88,6 +90,26 @@ onMounted(() => {
 
 function handleOpen() {}
 function handleClose() {}
+
+const route = useRoute();
+
+/**
+ * 获取当前展开路由菜单index
+ */
+function getDefaultActive(): string {
+  const matchedRoutes = [...route.matched];
+  let currentRouteMetaHidden = route.meta.hidden;
+  let currentRoutePath = route.path;
+
+  // 向route.matched数组中找到hidden不为true的路由（代表其在侧边栏中显示）
+  while (currentRouteMetaHidden && matchedRoutes.length > 0) {
+    const matchRoute = matchedRoutes.pop();
+    currentRouteMetaHidden = matchRoute?.meta.hidden;
+    currentRoutePath = matchRoute?.path || "";
+  }
+
+  return currentRoutePath;
+}
 </script>
 
 <style>
@@ -99,26 +121,33 @@ function handleClose() {}
   left: 0;
   box-sizing: border-box;
   display: flex;
+  background-color: whitesmoke;
 }
 
-.h2 {
-  color: #fff;
+h2 {
+  color: #000;
 }
+
 .content {
   width: 88%;
   height: 100%;
   display: flex;
   flex-direction: column;
 }
+
 .top {
   width: 100%;
   height: 8%;
-  background-color: rgb(200, 200, 255);
+  border-bottom: 1px solid #333;
+  background-color: #fff;
 }
+
 .viewContainer {
-  width: 100%;
+  width: 97%;
   height: 92%;
+  padding: 20px;
 }
+
 .menu {
   width: 12%;
   height: 100%;
@@ -126,9 +155,10 @@ function handleClose() {}
 }
 
 .el-menu .el-menu-item:hover {
-  background-color: rgb(200, 200, 255);
+  background-color: var(--el-menu-hover-bg-color);
 }
-.el-menu .el-menu-item:hover p {
+
+.el-menu .el-menu-item p {
   color: #fff;
 }
 </style>

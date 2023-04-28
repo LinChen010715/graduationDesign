@@ -24,11 +24,9 @@ export default [
     {
         path: '',
         name: '用户管理',
-        index: '1',
         children:[
             {
                 path: '/user',
-                index: '1-1',
                 name: '账户管理',
                 component: ()=>import('@/views/user/account/index.vue')
             },
@@ -37,11 +35,9 @@ export default [
     {
         path: '',
         name: '文件管理',
-        index: '2',
         children:[
             {
                 path: '/file',
-                index: '2-1',
                 name: '图片管理',
                 component: ()=>import('@/views/user/account/index.vue')
             },

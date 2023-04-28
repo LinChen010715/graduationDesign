@@ -2,15 +2,15 @@
   <el-sub-menu>
     <template #title>{{ menuInfo.name }}</template>
 
-    <template v-for="item in menuInfo.children" :key="item" :index="item.index">
+    <template v-for="item in menuInfo.children" :key="item.path">
       <template v-if="!item.children">
-        <el-menu-item>
+        <el-menu-item :index="item.path">
           <router-link :to="item.path"
             ><p>{{ item.name }}</p></router-link
           >
         </el-menu-item>
       </template>
-      <template v-else>
+      <template v-else :index="item.path">
         <sub-menu :menu-info="item"></sub-menu>
       </template>
     </template>

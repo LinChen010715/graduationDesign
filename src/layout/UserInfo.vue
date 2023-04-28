@@ -108,7 +108,7 @@ function submitChange() {
 }
 
 span {
-  color: white;
+  color: rgb(200, 200, 255);
   font-size: 20px;
 }
 
