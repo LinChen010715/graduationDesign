@@ -34,11 +34,16 @@ export default [
     },
     {
         path: '',
-        name: '文件管理',
+        name: '作品管理',
         children:[
             {
                 path: '/file',
-                name: '图片管理',
+                name: '作品管理',
+                component: ()=>import('@/views/user/account/index.vue')
+            },
+            {
+                path: '/great',
+                name: '优秀作品',
                 component: ()=>import('@/views/user/account/index.vue')
             },
         ]

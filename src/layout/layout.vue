@@ -112,7 +112,7 @@ function getDefaultActive(): string {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 .main {
   position: absolute;
   width: 100%;

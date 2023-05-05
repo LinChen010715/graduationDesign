@@ -53,7 +53,7 @@ const name =
     : "游客";
 
 async function loginOut() {
-  const res = await request.post("/api/v1/user/manage/logout");
+  const res = await request.post("/user/logout");
   if (!res) {
     return;
   }

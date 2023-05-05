@@ -7,7 +7,7 @@
       </template>
     </x-form>
 
-    <x-table ref="tableRef">
+    <x-table ref="tableRef" :api="api">
       <template #operation="{ checkedRows }">
         <el-button type="success" @click="openCreateDialog">新增</el-button>
         <el-button type="danger" @click="confirmMultiDelete(checkedRows)">
@@ -86,7 +86,7 @@ import {
 import { ref } from "vue";
 
 import { XTableAPI, XTableColumn, XTableElement } from "@/interface/table";
-
+import accountAPI from "@/api/user/account";
 import { ElMessage } from "element-plus";
 
 // TODO: 修改字段
@@ -155,9 +155,9 @@ const columns = ref<XTableColumn[]>(tableColumns);
 /**
  * 表格API
  */
-// const api: XTableAPI = {
-//   get: CustomerRequirementAPI.index,
-// };
+const api: XTableAPI = {
+  get: accountAPI.index,
+};
 
 /**
  * 新增/编辑表单

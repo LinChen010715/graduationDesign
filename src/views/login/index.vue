@@ -41,7 +41,7 @@ async function login() {
     return;
   }
 
-  const res = await request.post("/api/v1/user/manage/login", {
+  const res = await request.post("/user/login", {
     account: loginFormRef.value.loginForm.account,
     password: loginFormRef.value.loginForm.password,
   });
@@ -60,7 +60,7 @@ async function login() {
     message: "登录成功，欢迎来到小世界",
     type: "success",
   });
-  let userName = res.data.data.userName;
+  let userName = res.data.data.username;
   let account = res.data.data.account;
   let password = loginFormRef.value.loginForm.password;
 
