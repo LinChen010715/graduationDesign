@@ -184,10 +184,10 @@ async function loadData(queryData?: CustomPageTableForm): Promise<boolean> {
   }
 
   // 表格数据
-  tableData.value =
-    props.tableOptions.returnRecordKey === "self"
-      ? res.valueOf()
-      : res[props.tableOptions.returnRecordKey || "records"] || [];
+  tableData.value = res.data.data.data;
+  // props.tableOptions.returnRecordKey === "self"
+  //   ? res.valueOf()
+  //   : res[props.tableOptions.returnRecordKey || "data"] || [];
 
   intersectionBy(tableData.value, checkedRows.value, props.rowKey).forEach(
     (item: any) => {

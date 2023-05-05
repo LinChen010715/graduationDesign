@@ -95,7 +95,7 @@ import { ElMessage } from "element-plus";
  */
 const formList = ref<XFormItem[]>([
   {
-    prop: "userName",
+    prop: "username",
     label: "用户名",
     type: "input",
     elProps: {
@@ -140,12 +140,36 @@ function handleReset(form: XFormValue, formRef: FormElement | null): void {
  */
 const tableColumns: XTableColumn[] = [
   {
-    prop: "account",
+    prop: "code",
+    label: "编码",
+  },
+  {
+    prop: "username",
     label: "用户名",
   },
   {
-    prop: "password",
-    label: "密码",
+    prop: "account",
+    label: "账号",
+  },
+  {
+    prop: "genderLabel",
+    label: "性别",
+  },
+  {
+    prop: "email",
+    label: "邮箱",
+  },
+  {
+    prop: "phone",
+    label: "电话",
+  },
+  {
+    prop: "roleLabel",
+    label: "角色",
+  },
+  {
+    prop: "remark",
+    label: "备注",
   },
 ];
 /**
