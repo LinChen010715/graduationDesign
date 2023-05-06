@@ -5,13 +5,18 @@ export const userStore = defineStore('userInfo',{
         userInfo:{
             userName:"",
             account:"",
-            password:""
+            password:"",
+            token:""
         }
     }),
     actions:{
-         setUserInfo(prams){
+         setUserInfo(prams:any){
             this.userInfo = prams
-        }
+        },
+        // getUserInfo(){
+        //     console.log(this.userInfo);
+        //     return this.userInfo
+        // }
     },
 
     persist: {

@@ -62,12 +62,14 @@ async function login() {
   });
   let userName = res.data.data.username;
   let account = res.data.data.account;
+  let token = res.data.data.token;
   let password = loginFormRef.value.loginForm.password;
 
   userInfoStore.setUserInfo({
     userName: userName,
     account: account,
     password: password,
+    token: token,
   });
 
   router.push("./");

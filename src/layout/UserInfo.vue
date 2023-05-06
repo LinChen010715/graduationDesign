@@ -53,7 +53,12 @@ const name =
     : "游客";
 
 async function loginOut() {
+  console.log("56", userInfoStore.userInfo);
+
   const res = await request.post("/user/logout");
+
+  console.log("59", userInfoStore.userInfo);
+
   if (!res) {
     return;
   }
@@ -61,7 +66,7 @@ async function loginOut() {
     message: "已退出",
     type: "success",
   });
-  localStorage.clear();
+  // localStorage.clear();
   router.push("./login");
 }
 
