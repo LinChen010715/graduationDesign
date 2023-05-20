@@ -6,7 +6,9 @@ export const userStore = defineStore('userInfo',{
             userName:"",
             account:"",
             password:"",
-            token:""
+            token:"",
+            role:0,
+            roleLabel:""
         }
     }),
     actions:{

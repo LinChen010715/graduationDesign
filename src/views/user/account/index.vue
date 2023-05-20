@@ -1,5 +1,6 @@
 <template>
-  <div class="customer">
+  <div v-if="!whetherHasPermission">您暂无权限访问此页面</div>
+  <div v-else class="customer">
     <x-form :form-list="formList">
       <template #action="{ form, formRef }">
         <el-button type="primary" @click="handleSearch(form)">查询</el-button>
@@ -83,11 +84,18 @@ import {
   XFormValue,
   XSelectForm,
 } from "@/interface/form";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 
 import { XTableAPI, XTableColumn, XTableElement } from "@/interface/table";
 import accountAPI from "@/api/user/account";
 import { ElMessage } from "element-plus";
+import { genderType, roleType } from "./const";
+import { OPERATION_NOTICE } from "@/utils/notice";
+import to from "@/utils/await-to";
+import { confirmDeleteMessage } from "@/utils/confirm-message";
+import { userStore } from "@/layout/index";
+
+const whetherHasPermission = ref<boolean>(true);
 
 // TODO: 修改字段
 /**
@@ -188,7 +196,21 @@ const api: XTableAPI = {
  */
 const baseFormList: XFormItem[] = [
   {
-    prop: "account",
+    prop: "code",
+    label: "编码",
+    type: "input",
+    rule: [
+      {
+        required: true,
+        message: "请输入编码",
+      },
+    ],
+    elProps: {
+      placeholder: "请输入编码",
+    },
+  },
+  {
+    prop: "username",
     label: "用户名",
     type: "input",
     rule: [
@@ -199,6 +221,20 @@ const baseFormList: XFormItem[] = [
     ],
     elProps: {
       placeholder: "请输入用户名",
+    },
+  },
+  {
+    prop: "account",
+    label: "用户名",
+    type: "input",
+    rule: [
+      {
+        required: true,
+        message: "请输入密码",
+      },
+    ],
+    elProps: {
+      placeholder: "请输入密码",
     },
   },
   {
@@ -213,6 +249,72 @@ const baseFormList: XFormItem[] = [
     ],
     elProps: {
       placeholder: "请输入密码",
+    },
+  },
+  {
+    prop: "gender",
+    label: "性别",
+    type: "select",
+    rule: [
+      {
+        required: true,
+        message: "请选择性别",
+      },
+    ],
+    elProps: {
+      placeholder: "请选择性别",
+    },
+    options: genderType,
+  },
+  {
+    prop: "email",
+    label: "邮箱",
+    type: "input",
+    rule: [
+      {
+        required: true,
+        message: "请输入邮箱",
+      },
+    ],
+    elProps: {
+      placeholder: "请输入邮箱",
+    },
+  },
+  {
+    prop: "phone",
+    label: "电话",
+    type: "input",
+    rule: [
+      {
+        required: true,
+        message: "请输入电话",
+      },
+    ],
+    elProps: {
+      placeholder: "请输入电话",
+    },
+  },
+  {
+    prop: "role",
+    label: "角色",
+    type: "select",
+    rule: [
+      {
+        required: true,
+        message: "请选择角色",
+      },
+    ],
+    elProps: {
+      placeholder: "请选择角色",
+    },
+    options: roleType,
+  },
+  {
+    prop: "remark",
+    label: "备注",
+    type: "input",
+    elProps: {
+      placeholder: "请输入备注",
     },
   },
 ];
@@ -253,33 +355,33 @@ async function create(
   form: XFormValue,
   formRef: FormElement | null
 ): Promise<boolean> {
-  //   createLoading.value = true;
-  //   // 表单验证
-  //   const [err, valid] = await to<boolean>(
-  //     formRef?.validate() || Promise.resolve(false)
-  //   );
+  createLoading.value = true;
+  // 表单验证
+  const [err, valid] = await to<boolean>(
+    formRef?.validate() || Promise.resolve(false)
+  );
 
-  //   // 未通过表单验证
-  //   if (err || !valid) {
-  //     createLoading.value = false;
-  //     return false;
-  //   }
+  // 未通过表单验证
+  if (err || !valid) {
+    createLoading.value = false;
+    return false;
+  }
 
-  //   // 新增
-  //   const res = await CustomerRequirementAPI.save(form);
+  // 新增
+  const res = await accountAPI.save(form);
 
-  //   // 新增失败
-  //   if (!res) {
-  //     ElMessage.error(OPERATION_NOTICE.CREATE_ERROR);
-  //     createLoading.value = false;
-  //     return false;
-  //   }
+  // 新增失败
+  if (!res) {
+    ElMessage.error(OPERATION_NOTICE.CREATE_ERROR);
+    createLoading.value = false;
+    return false;
+  }
 
-  //   // 新增成功
-  //   ElMessage.success(OPERATION_NOTICE.CREATE_SUCCESS);
-  //   tableRef.value?.loadData(searchData.value);
-  //   createVisible.value = false;
-  //   createLoading.value = false;
+  // 新增成功
+  ElMessage.success(OPERATION_NOTICE.CREATE_SUCCESS);
+  tableRef.value?.loadData(searchData.value);
+  createVisible.value = false;
+  createLoading.value = false;
   return true;
 }
 
@@ -309,8 +411,6 @@ const editFormValue = ref<Record<string, unknown>>({});
  * 打开编辑
  */
 function openEditDialog(row: Record<string, string>) {
-  if (row.validityTerm == null) delete row.validityTerm;
-  if (row.shelfLife == null) delete row.shelfLife;
   editFormValue.value = row;
   editVisible.value = true;
 }
@@ -324,33 +424,33 @@ const editLoading = ref<boolean>(false);
  * 编辑
  */
 async function edit(form: XFormValue, formRef: FormElement): Promise<boolean> {
-  //   editLoading.value = true;
-  //   // 表单验证
-  //   const [err, valid] = await to<boolean>(
-  //     formRef?.validate() || Promise.resolve(false)
-  //   );
+  editLoading.value = true;
+  // 表单验证
+  const [err, valid] = await to<boolean>(
+    formRef?.validate() || Promise.resolve(false)
+  );
 
-  //   // 未通过表单校验
-  //   if (err || !valid) {
-  //     editLoading.value = false;
-  //     return false;
-  //   }
+  // 未通过表单校验
+  if (err || !valid) {
+    editLoading.value = false;
+    return false;
+  }
 
-  //   // 编辑
-  //   const res = await CustomerRequirementAPI.save(form);
+  // 编辑
+  const res = await accountAPI.save(form);
 
-  //   // 编辑失败
-  //   if (!res) {
-  //     ElMessage.error(OPERATION_NOTICE.EDIT_ERROR);
-  //     editLoading.value = false;
-  //     return false;
-  //   }
+  // 编辑失败
+  if (!res) {
+    ElMessage.error(OPERATION_NOTICE.EDIT_ERROR);
+    editLoading.value = false;
+    return false;
+  }
 
-  //   // 编辑成功
-  //   ElMessage.success(OPERATION_NOTICE.EDIT_SUCCESS);
-  //   tableRef.value?.loadData(searchData.value);
-  //   editVisible.value = false;
-  //   editLoading.value = false;
+  // 编辑成功
+  ElMessage.success(OPERATION_NOTICE.EDIT_SUCCESS);
+  tableRef.value?.loadData(searchData.value);
+  editVisible.value = false;
+  editLoading.value = false;
   return true;
 }
 
@@ -365,16 +465,16 @@ function cancelEdit(): void {
  * 确认删除
  */
 async function confirmDelete(row: Record<string, unknown>): Promise<boolean> {
-  //   // 弹出提示信息
-  //   const res = await confirmDeleteMessage();
+  // 弹出提示信息
+  const res = await confirmDeleteMessage();
 
-  //   // 取消删除
-  //   if (!res) {
-  //     return false;
-  //   }
+  // 取消删除
+  if (!res) {
+    return false;
+  }
 
-  //   // 确认删除
-  //   handleDelete(row);
+  // 确认删除
+  handleDelete(row);
   return true;
 }
 
@@ -382,19 +482,19 @@ async function confirmDelete(row: Record<string, unknown>): Promise<boolean> {
  * 删除
  */
 async function handleDelete(row: Record<string, unknown>): Promise<boolean> {
-  //   const res = await CustomerRequirementAPI.del({
-  //     ids: [row.id],
-  //   });
+  const res = await accountAPI.del({
+    idList: [row.id],
+  });
 
-  //   // 删除失败
-  //   if (!res) {
-  //     ElMessage.error(OPERATION_NOTICE.DELETE_ERROR);
-  //     return false;
-  //   }
+  // 删除失败
+  if (!res) {
+    ElMessage.error(OPERATION_NOTICE.DELETE_ERROR);
+    return false;
+  }
 
-  //   // 删除成功
-  //   ElMessage.success(OPERATION_NOTICE.DELETE_SUCCESS);
-  //   tableRef.value?.loadData(searchData.value);
+  // 删除成功
+  ElMessage.success(OPERATION_NOTICE.DELETE_SUCCESS);
+  tableRef.value?.loadData(searchData.value);
   return true;
 }
 
@@ -404,21 +504,21 @@ async function handleDelete(row: Record<string, unknown>): Promise<boolean> {
 async function confirmMultiDelete(
   checkedRows: Record<string, unknown>[]
 ): Promise<boolean> {
-  //   if (checkedRows.length < 1) {
-  //     ElMessage.warning(OPERATION_NOTICE.SELECTION_NONE);
-  //     return false;
-  //   }
+  if (checkedRows.length < 1) {
+    ElMessage.warning(OPERATION_NOTICE.SELECTION_NONE);
+    return false;
+  }
 
-  //   // 弹出提示信息
-  //   const res = await confirmDeleteMessage();
+  // 弹出提示信息
+  const res = await confirmDeleteMessage();
 
-  //   // 取消删除
-  //   if (!res) {
-  //     return false;
-  //   }
+  // 取消删除
+  if (!res) {
+    return false;
+  }
 
-  //   // 确认删除
-  //   handleMultiDelete(checkedRows);
+  // 确认删除
+  handleMultiDelete(checkedRows);
   return true;
 }
 
@@ -428,21 +528,22 @@ async function confirmMultiDelete(
 async function handleMultiDelete(
   checkedRows: Record<string, unknown>[]
 ): Promise<boolean> {
-  //   const res = await CustomerRequirementAPI.del({
-  //     ids: checkedRows.map((row) => row.id),
-  //   });
+  const res = await accountAPI.del({
+    idList: checkedRows.map((row) => row.id),
+  });
 
-  //   // 删除失败
-  //   if (!res) {
-  //     ElMessage.error(OPERATION_NOTICE.DELETE_ERROR);
-  //     return false;
-  //   }
+  // 删除失败
+  if (!res) {
+    ElMessage.error(OPERATION_NOTICE.DELETE_ERROR);
+    return false;
+  }
 
-  //   // 删除成功
-  //   ElMessage.success(OPERATION_NOTICE.DELETE_SUCCESS);
-  //   tableRef.value?.loadData(searchData.value);
+  // 删除成功
+  ElMessage.success(OPERATION_NOTICE.DELETE_SUCCESS);
+  tableRef.value?.loadData(searchData.value);
   return true;
 }
+
 /**
  * 处理表头改变事件
  * @param val
@@ -450,4 +551,16 @@ async function handleMultiDelete(
 function handleColumnsChange(val: XTableColumn[]) {
   columns.value = val;
 }
+
+/**
+ * 判断身份是否有权限
+ */
+onMounted(() => {
+  const userInfoStore = userStore();
+  let role = userInfoStore.userInfo.role;
+  whetherHasPermission.value = role === 0 ? false : true;
+  if (!whetherHasPermission.value) {
+    ElMessage.warning(OPERATION_NOTICE.PERMISSION_NONE);
+  }
+});
 </script>

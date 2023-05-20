@@ -154,8 +154,12 @@ h2 {
   background-color: rgb(200, 200, 255);
 }
 
+::v-deep(.el-sub-menu .el-menu-item) {
+  min-width: 50px;
+}
+
 .el-menu .el-menu-item:hover {
-  background-color: var(--el-menu-hover-bg-color);
+  background-color: blue;
 }
 
 .el-menu .el-menu-item p {

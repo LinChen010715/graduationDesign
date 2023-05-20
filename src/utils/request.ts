@@ -16,6 +16,7 @@ const instance = axios.create({
 
 const TOKEN = "token";
 
+
 // 请求拦截
 instance.interceptors.request.use(
     (config: any) => {
@@ -27,7 +28,7 @@ instance.interceptors.request.use(
         const token = userInfoStore.userInfo.token;
         // 统一添加token
         if (config.headers) {
-            config.headers[TOKEN] = token;
+            config.headers['TOKEN'] = token;
         }
 
         return config;

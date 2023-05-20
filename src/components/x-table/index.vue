@@ -120,7 +120,7 @@ const tableData = ref<[]>([]);
 /**
  * 分页数据
  */
-const paginationData = reactive<ElPaginationData>({
+const paginationData = ref<ElPaginationData>({
   total: 0,
   currentPage: 1,
   pageSizes: [10, 20, 50, 100],
@@ -163,9 +163,9 @@ async function loadData(queryData?: CustomPageTableForm): Promise<boolean> {
     Object.assign(
       {
         [props.tableOptions.queryCurrentPageKey || "page"]:
-          paginationData.currentPage,
+          paginationData.value.currentPage,
         [props.tableOptions.queryPageSizeKey || "limit"]:
-          paginationData.pageSize,
+          paginationData.value.pageSize,
       },
       props.tableOptions.params,
       queryData
@@ -178,13 +178,13 @@ async function loadData(queryData?: CustomPageTableForm): Promise<boolean> {
   // 响应失败
   if (!res) {
     loading.value = false;
-    paginationData.total = 0;
-    paginationData.currentPage = 1;
+    paginationData.value.total = 0;
+    paginationData.value.currentPage = 1;
     return false;
   }
 
   // 表格数据
-  tableData.value = res.data.data.data;
+  tableData.value = res.data.data.data ?? [];
   // props.tableOptions.returnRecordKey === "self"
   //   ? res.valueOf()
   //   : res[props.tableOptions.returnRecordKey || "data"] || [];
@@ -196,9 +196,10 @@ async function loadData(queryData?: CustomPageTableForm): Promise<boolean> {
   );
 
   // 分页数据
-  paginationData.total = res[props.tableOptions.returnTotalKey || "total"] || 0;
-  paginationData.currentPage = Number(
-    res[props.tableOptions.returnCurrentPageKey || "current"]
+  paginationData.value.total =
+    res.data.data[props.tableOptions.returnTotalKey || "total"] || 0;
+  paginationData.value.currentPage = Number(
+    res.data.data[props.tableOptions.returnCurrentPageKey || "current"]
   );
 
   loading.value = false;
@@ -260,8 +261,8 @@ function clearSelection(): void {
 function clearTable(): void {
   tableData.value = [];
 
-  paginationData.currentPage = 1;
-  paginationData.total = 0;
+  paginationData.value.currentPage = 1;
+  paginationData.value.total = 0;
 }
 
 // 数据初始化

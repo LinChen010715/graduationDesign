@@ -31,7 +31,7 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style type="scss" scoped>
 p {
   color: #fff;
 }

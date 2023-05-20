@@ -63,6 +63,8 @@ async function login() {
   let userName = res.data.data.username;
   let account = res.data.data.account;
   let token = res.data.data.token;
+  let role = res.data.data.role;
+  let roleLabel = res.data.data.role === 0 ? "非管理员" : "管理员";
   let password = loginFormRef.value.loginForm.password;
 
   userInfoStore.setUserInfo({
@@ -70,6 +72,8 @@ async function login() {
     account: account,
     password: password,
     token: token,
+    role: role,
+    roleLabel: roleLabel,
   });
 
   router.push("./");

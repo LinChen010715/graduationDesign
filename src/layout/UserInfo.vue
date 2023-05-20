@@ -66,7 +66,7 @@ async function loginOut() {
     message: "已退出",
     type: "success",
   });
-  // localStorage.clear();
+  localStorage.clear();
   router.push("./login");
 }
 
