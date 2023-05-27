@@ -6,10 +6,17 @@
       label-width="130px"
       :rules="rules"
     >
-      <el-form-item label="请输入用户名:" prop="account">
+      <el-form-item label="请输入用户名:" prop="username">
+        <el-input
+          v-model="registerForm.username"
+          placeholder="请输入用户名"
+          clearable
+        />
+      </el-form-item>
+      <el-form-item label="请输入账号:" prop="account">
         <el-input
           v-model="registerForm.account"
-          placeholder="请输入用户名"
+          placeholder="请输入账号"
           clearable
         />
       </el-form-item>
@@ -22,13 +29,41 @@
           type="password"
         />
       </el-form-item>
-      <el-form-item label="请再次输入密码:" prop="rePassword">
+      <el-form-item label="请再次输入密码:" prop="againPassword">
         <el-input
-          v-model="registerForm.rePassword"
+          v-model="registerForm.againPassword"
           placeholder="请再次输入密码"
           clearable
           show-password
           type="password"
+        />
+      </el-form-item>
+      <el-form-item label="性别:" prop="gender">
+        <el-select
+          v-model="registerForm.gender"
+          placeholder="请选择性别"
+          clearable
+        >
+          <el-option
+            v-for="item in genderType"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="电话:" prop="phone">
+        <el-input
+          v-model="registerForm.phone"
+          placeholder="请输入电话"
+          clearable
+        />
+      </el-form-item>
+      <el-form-item label="邮箱:" prop="email">
+        <el-input
+          v-model="registerForm.email"
+          placeholder="请输入邮箱"
+          clearable
         />
       </el-form-item>
       <el-form-item>
@@ -52,6 +87,7 @@
 <script lang="ts" setup>
 import { ElMessage } from "element-plus";
 import { ref } from "vue";
+import { genderType } from "@/views/user/account/const";
 
 const registerVisible = ref(false);
 
@@ -65,21 +101,34 @@ function open(caption: string) {
 const registerFormRef = ref();
 
 const registerForm = ref({
+  username: "",
   account: "",
   password: "",
-  rePassword: "",
+  againPassword: "",
+  gender: "",
+  phone: "",
+  email: "",
 });
 
 const rules = ref({
-  account: [{ required: true, message: "用户名不能为空", trigger: "blur" }],
+  username: [{ required: true, message: "用户名不能为空", trigger: "blur" }],
+  account: [{ required: true, message: "账号不能为空", trigger: "blur" }],
   password: [{ required: true, message: "密码不能为空", trigger: "blur" }],
-  rePassword: [{ required: true, message: "请再次输入密码", trigger: "blur" }],
+  againPassword: [
+    { required: true, message: "请再次输入密码", trigger: "blur" },
+  ],
 });
 
 function valid() {
-  if (!registerForm.value.account || registerForm.value.account === "") {
+  if (!registerForm.value.username || registerForm.value.username === "") {
     ElMessage({
       message: "用户名不能为空",
+      type: "warning",
+    });
+    return false;
+  } else if (!registerForm.value.account || registerForm.value.account === "") {
+    ElMessage({
+      message: "账号不能为空",
       type: "warning",
     });
     return false;
@@ -93,8 +142,8 @@ function valid() {
     });
     return false;
   } else if (
-    !registerForm.value.rePassword ||
-    registerForm.value.rePassword === ""
+    !registerForm.value.againPassword ||
+    registerForm.value.againPassword === ""
   ) {
     ElMessage({
       message: "请再次输入密码",
@@ -102,7 +151,7 @@ function valid() {
     });
     return false;
   }
-  if (registerForm.value.password !== registerForm.value.rePassword) {
+  if (registerForm.value.password !== registerForm.value.againPassword) {
     ElMessage({
       message: "两次密码输入不一致",
       type: "warning",

@@ -54,10 +54,18 @@ const name =
 
 async function loginOut() {
   console.log("56", userInfoStore.userInfo);
+  if (!userInfoStore.userInfo.token || userInfoStore.userInfo.token === "") {
+    ElMessage({
+      message: "已退出",
+      type: "success",
+    });
+    router.push("./login");
+    return;
+  }
 
   const res = await request.post("/user/logout");
 
-  console.log("59", userInfoStore.userInfo);
+  console.log("userInfoStore.userInfo:", userInfoStore.userInfo);
 
   if (!res) {
     return;
@@ -91,9 +99,22 @@ function changeNow() {
   router.push("/login");
 }
 
-function submitChange() {
+async function submitChange() {
   let changeValid = changePasswordRef.value.changeValid();
   if (!changeValid) {
+    return;
+  }
+  let formValue = changePasswordRef.value.changePasswordForm;
+  const res = await request.post("/user/updatePassword", {
+    account: formValue.account,
+    password: formValue.password,
+    againPassword: formValue.againPassword,
+  });
+  if (!res) {
+    ElMessage({
+      message: "修改失败",
+      type: "error",
+    });
     return;
   }
   ElMessage({

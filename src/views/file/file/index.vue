@@ -8,7 +8,7 @@
       </template>
     </x-form>
 
-    <x-table ref="tableRef" :api="api">
+    <x-table ref="tableRef" :api="api" :table-options="tableOptions">
       <template #operation>
         <column-setting
           :columns="tableColumns"
@@ -31,7 +31,7 @@
             >
             <el-button
               type="text"
-              :disabled="row.isGood"
+              :disabled="row.isGood === 1"
               @click="openSetGreat(row)"
               >设为优秀作品</el-button
             >
@@ -69,7 +69,8 @@
     <el-dialog v-model="detailVisible">
       <h2>查看作品详情</h2>
       <br />
-      <img :src="url" />
+      <div>{{ fileName }}</div>
+      <a :href="filePath">{{ filePath }}</a>
     </el-dialog>
   </div>
 </template>
@@ -83,7 +84,12 @@ import {
 } from "@/interface/form";
 import { ref, onMounted } from "vue";
 
-import { XTableAPI, XTableColumn, XTableElement } from "@/interface/table";
+import {
+  XTableAPI,
+  XTableColumn,
+  XTableElement,
+  XTableOptions,
+} from "@/interface/table";
 import fileAPI from "@/api/file/file/file";
 import { ElMessage } from "element-plus";
 import { OPERATION_NOTICE } from "@/utils/notice";
@@ -117,6 +123,15 @@ const formList = ref<XFormItem[]>([
     },
   },
 ]);
+
+/**
+ * 表格配置
+ */
+const tableOptions: XTableOptions = {
+  params: {
+    isReject: 0,
+  },
+};
 
 /**
  * 查询数据
@@ -241,7 +256,7 @@ const setGreatVisible = ref<boolean>(false);
 /**
  * el-form props
  */
-const elFromProps = {
+const elFromProps: any = {
   labelWidth: "150px",
 };
 
@@ -255,6 +270,7 @@ const setGreatFormList = ref<XFormItem[]>(baseFormList);
  */
 function openSetGreat(row: any): void {
   setGreatVisible.value = true;
+  elFromProps["id"] = row.id;
 }
 
 /**
@@ -282,7 +298,7 @@ async function setGreat(
   }
 
   // 设置优秀
-  const res = await fileAPI.setGreat(form);
+  const res = await fileAPI.setGreat({ ...form, id: elFromProps.id });
 
   // 设置优秀失败
   if (!res) {
@@ -327,7 +343,7 @@ async function confirmDelete(row: Record<string, unknown>): Promise<boolean> {
  * 删除
  */
 async function handleDelete(row: Record<string, unknown>): Promise<boolean> {
-  const res = await fileAPI.del({
+  const res = await fileAPI.reject({
     idList: [row.id],
   });
 
@@ -349,20 +365,26 @@ async function handleDelete(row: Record<string, unknown>): Promise<boolean> {
 const detailVisible = ref<boolean>(false);
 
 /**
- * 图片显示地址
+ * 图片显示
  */
-const url = ref<string>();
+const fileName = ref<string>();
+
+const filePath = ref<string>();
 
 /**
  * 打开查看详情
  * @param row
  */
 async function viewDetail(row: any) {
-  debugger;
   detailVisible.value = true;
   const res: any = await fileAPI.viewFile({ id: row.id });
+  if (!res) {
+    return;
+  }
   console.log(res);
-  url.value = res.data;
+  let fileArr = res.data?.split("/")?.reverse();
+  filePath.value = res.data;
+  fileName.value = fileArr[0];
 }
 
 /**

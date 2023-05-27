@@ -199,12 +199,6 @@ const baseFormList: XFormItem[] = [
     prop: "code",
     label: "编码",
     type: "input",
-    rule: [
-      {
-        required: true,
-        message: "请输入编码",
-      },
-    ],
     elProps: {
       placeholder: "请输入编码",
     },
@@ -225,16 +219,16 @@ const baseFormList: XFormItem[] = [
   },
   {
     prop: "account",
-    label: "用户名",
+    label: "账号",
     type: "input",
     rule: [
       {
         required: true,
-        message: "请输入密码",
+        message: "请输入账号",
       },
     ],
     elProps: {
-      placeholder: "请输入密码",
+      placeholder: "请输入账号",
     },
   },
   {
@@ -255,12 +249,6 @@ const baseFormList: XFormItem[] = [
     prop: "gender",
     label: "性别",
     type: "select",
-    rule: [
-      {
-        required: true,
-        message: "请选择性别",
-      },
-    ],
     elProps: {
       placeholder: "请选择性别",
     },
@@ -270,12 +258,6 @@ const baseFormList: XFormItem[] = [
     prop: "email",
     label: "邮箱",
     type: "input",
-    rule: [
-      {
-        required: true,
-        message: "请输入邮箱",
-      },
-    ],
     elProps: {
       placeholder: "请输入邮箱",
     },
@@ -284,12 +266,6 @@ const baseFormList: XFormItem[] = [
     prop: "phone",
     label: "电话",
     type: "input",
-    rule: [
-      {
-        required: true,
-        message: "请输入电话",
-      },
-    ],
     elProps: {
       placeholder: "请输入电话",
     },

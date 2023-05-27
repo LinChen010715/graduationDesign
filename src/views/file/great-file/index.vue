@@ -7,7 +7,7 @@
       </template>
     </x-form>
 
-    <x-table ref="tableRef" :api="api">
+    <x-table ref="tableRef" :api="api" :table-options="tableOptions">
       <template #operation>
         <column-setting
           :columns="tableColumns"
@@ -28,10 +28,7 @@
             <el-button type="text" @click="viewDetail(row)"
               >查看作品详情</el-button
             >
-            <el-button
-              type="text"
-              :disabled="row.isGood"
-              @click="returnGreat(row)"
+            <el-button type="text" v-if="role" @click="returnGreat(row)"
               >撤回优秀作品</el-button
             >
           </template>
@@ -43,7 +40,8 @@
     <el-dialog v-model="detailVisible">
       <h2>查看作品详情</h2>
       <br />
-      <img :src="url" />
+      <div>{{ fileName }}</div>
+      <a :href="filePath">{{ filePath }}</a>
     </el-dialog>
   </div>
 </template>
@@ -54,14 +52,26 @@ import {
   XFormValue,
   XSelectForm,
 } from "@/interface/form";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
-import { XTableAPI, XTableColumn, XTableElement } from "@/interface/table";
+import {
+  XTableAPI,
+  XTableColumn,
+  XTableElement,
+  XTableOptions,
+} from "@/interface/table";
 import greatAPI from "@/api/file/great-file/great-file";
 import { ElMessage } from "element-plus";
 import { OPERATION_NOTICE } from "@/utils/notice";
 import to from "@/utils/await-to";
 import { confirmReturnMessage } from "@/utils/confirm-message";
+import { userStore } from "@/layout/index";
+
+const userInfoStore = userStore();
+
+const role = computed(() => {
+  return userInfoStore.userInfo.role === 0 ? false : true;
+});
 
 // TODO: 修改字段
 /**
@@ -159,6 +169,16 @@ const api: XTableAPI = {
 };
 
 /**
+ * 表格配置
+ */
+const tableOptions: XTableOptions = {
+  params: {
+    isGood: 1,
+    isReject: 0,
+  },
+};
+
+/**
  * 确认撤回
  */
 async function returnGreat(row: Record<string, unknown>): Promise<boolean> {
@@ -180,7 +200,7 @@ async function returnGreat(row: Record<string, unknown>): Promise<boolean> {
  */
 async function handleDelete(row: Record<string, unknown>): Promise<boolean> {
   const res = await greatAPI.del({
-    idList: [row.id],
+    id: row.id,
   });
 
   // 撤回失败
@@ -200,14 +220,24 @@ async function handleDelete(row: Record<string, unknown>): Promise<boolean> {
  */
 const detailVisible = ref<boolean>(false);
 
+const fileName = ref<string>();
+
+const filePath = ref<string>();
+
 /**
  * 打开查看详情
  * @param row
  */
 async function viewDetail(row: any) {
   detailVisible.value = true;
-  const res = greatAPI.viewFile({ id: row.id });
+  const res: any = await greatAPI.viewFile({ id: row.id });
+  if (!res) {
+    return;
+  }
   console.log(res);
+  let fileArr = res.data?.split("/")?.reverse();
+  filePath.value = res.data;
+  fileName.value = fileArr[0];
 }
 
 /**

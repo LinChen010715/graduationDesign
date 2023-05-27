@@ -31,9 +31,9 @@
           type="password"
         />
       </el-form-item>
-      <el-form-item label="请再次输入密码:" prop="rePassword">
+      <el-form-item label="请再次输入密码:" prop="againPassword">
         <el-input
-          v-model="changePasswordForm.rePassword"
+          v-model="changePasswordForm.againPassword"
           placeholder="请再次输入密码"
           clearable
           show-password
@@ -74,14 +74,14 @@ const rules = ref({
   account: [{ required: true, message: "用户名不能为空", trigger: "blur" }],
   oldPassword: [{ required: true, message: "原密码不能为空", trigger: "blur" }],
   password: [{ required: true, message: "密码不能为空", trigger: "blur" }],
-  rePassword: [{ required: true, message: "请再次输入密码", trigger: "blur" }],
+  againPassword: [{ required: true, message: "请再次输入密码", trigger: "blur" }],
 });
 
 const changePasswordForm = ref({
   account: "",
   oldPassword: "",
   password: "",
-  rePassword: "",
+  againPassword: "",
 });
 
 function openChange(changeTitle: string) {
@@ -117,8 +117,8 @@ function changeValid() {
     });
     return false;
   } else if (
-    !changePasswordForm.value.rePassword ||
-    changePasswordForm.value.rePassword === ""
+    !changePasswordForm.value.againPassword ||
+    changePasswordForm.value.againPassword === ""
   ) {
     ElMessage({
       message: "请再次输入新密码",
@@ -134,7 +134,7 @@ function changeValid() {
     });
     return false;
   } else if (
-    changePasswordForm.value.password !== changePasswordForm.value.rePassword
+    changePasswordForm.value.password !== changePasswordForm.value.againPassword
   ) {
     ElMessage({
       message: "两次密码输入不一致",

@@ -1,5 +1,6 @@
 <template>
   <div class="login">
+    <div class="bigTitle">3D打印云服务平台</div>
     <div class="loginContainer">
       <div class="title">登录</div>
       <loginForm ref="loginFormRef">
@@ -47,11 +48,15 @@ async function login() {
   });
 
   if (!res) {
+    ElMessage({
+      message: "登陆失败",
+      type: "error",
+    });
     return false;
   }
   if (!res.data.data) {
     ElMessage({
-      message: res.data.message,
+      message: "登陆失败",
       type: "error",
     });
     return false;
@@ -96,7 +101,7 @@ function cancel() {
 const registerAccount = ref();
 const registerPassword = ref();
 
-function submit() {
+async function submit() {
   const valid = registerRef.value.valid();
   if (!valid) {
     return;
@@ -105,6 +110,23 @@ function submit() {
   let registerForm = registerRef.value.registerForm;
   registerAccount.value = registerForm.account;
   registerPassword.value = registerForm.password;
+
+  const res = await request.post("/user/register", {
+    username: registerForm.username,
+    account: registerAccount.value,
+    password: registerPassword.value,
+    againPassword: registerForm.againPassword,
+    gender: registerForm.gender,
+    phone: registerForm.phone,
+    email: registerForm.email,
+  });
+  if (res.data.code === -1) {
+    ElMessage({
+      message: res.data.message,
+      type: "error",
+    });
+    return;
+  }
 
   cancel();
 
@@ -119,11 +141,11 @@ function loginCancel() {
   registerRef.value.registerLoginVisible = false;
 }
 
-function loginNow() {
+async function loginNow() {
   registerRef.value.registerLoginVisible = false;
   loginFormRef.value.loginForm.account = registerAccount.value;
   loginFormRef.value.loginForm.password = registerPassword.value;
-  login();
+  await login();
 }
 </script>
 
@@ -134,6 +156,15 @@ function loginNow() {
   background-image: url(@/assets/back.jpg);
   background-size: 100% 100%;
 }
+
+.bigTitle {
+  font-size: 30px;
+  color: #fff;
+  position: absolute;
+  right: 60px;
+  top: 350px;
+}
+
 .loginContainer {
   width: 20%;
   padding: 10px;

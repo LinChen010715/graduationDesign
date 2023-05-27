@@ -159,7 +159,7 @@ h2 {
 }
 
 .el-menu .el-menu-item:hover {
-  background-color: blue;
+  background-color: rgb(204, 204, 204);
 }
 
 .el-menu .el-menu-item p {

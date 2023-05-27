@@ -7,7 +7,7 @@ export default {
      * @param data 
      * @returns 
      */
-    del: (data: unknown): Promise<unknown> => request.post('composition/delete', data),
+    reject: (data: unknown): Promise<unknown> => request.post('/composition/reject', data),
     /**
      * 设为优秀作品
      * @param data 
